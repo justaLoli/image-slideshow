@@ -57,7 +57,6 @@ selectButton.addEventListener('click', () => {
 });
 
 function showImage(index) {
-  // return;
   if (index < 0) {
     index = images.length - 1;
   } else if (index >= images.length) {
@@ -68,12 +67,11 @@ function showImage(index) {
     }
   }
   if (images.length > 0) { // 检查是否有图片
-    // const reader = new FileReader();
-    // reader.onload = (event) => {
-    //   imageArea.innerHTML = `<img src="${event.target.result}">`;
-    // };
-    // reader.readAsDataURL(images[index]);
-    imageArea.innerHTML = images[index].name;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      imageArea.innerHTML = `<img src="${event.target.result}">`;
+    };
+    reader.readAsDataURL(images[index]);
   } else {
     imageArea.innerHTML = "请选择图片"; // 提示用户选择图片
   }
