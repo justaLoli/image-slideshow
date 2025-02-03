@@ -31,13 +31,15 @@
 <button id="fullscreen-button">全屏</button>
 <button id="clear-button">清空</button>
 <input type="number" id="interval-input" value="3" inputmode="numeric"> 秒
+<p id="filename-display"></p>
 <div id="image-area"></div>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/screenfull.js/5.2.0/screenfull.min.js" integrity="sha512-GoG2/bE6QSPKSrjuoII6iPL2ODnwUJvFgysFYLTW2ltpx6G5nj+mYvhPq5rLPZby0rdMFU2fo4BMlWND7+QZ5g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script>
 const selectButton = document.getElementById('select-button');
 const fullscreenButton = document.getElementById('fullscreen-button');
 const clearButton = document.getElementById('clear-button');
 const intervalInput = document.getElementById('interval-input');
+const filenameDisplay = document.getElementById('filename-display');
 let intervalId = null;
 
 const imageArea = document.getElementById('image-area');
@@ -51,6 +53,8 @@ selectButton.addEventListener('click', () => {
   input.accept = 'image/*';
   input.addEventListener('change', () => {
     images = Array.from(input.files);
+    currentImageIndex = 0;
+    startInterval();
     showImage(currentImageIndex);
   });
   input.click();
@@ -66,14 +70,19 @@ function showImage(index) {
       index = 0;
     }
   }
+  console.log(index);
   if (images.length > 0) { // 检查是否有图片
+    debugger;
     const reader = new FileReader();
+    filenameDisplay.innerHTML = `${images[index].name}`;
     reader.onload = (event) => {
-      imageArea.innerHTML = `<img src="${event.target.result}">`;
+      imageArea.innerHTML = `<img src="${event.target.result}" alt="${images[index].name}">`;
     };
     reader.readAsDataURL(images[index]);
   } else {
+    filenameDisplay.innerHTML = "";
     imageArea.innerHTML = "请选择图片"; // 提示用户选择图片
+
   }
 }
 
@@ -94,15 +103,18 @@ startInterval();
 
 // 全屏功能
 fullscreenButton.addEventListener('click', () => {
-  if (imageArea.requestFullscreen) {
-    imageArea.requestFullscreen();
-  } else if (imageArea.mozRequestFullScreen) { /* Firefox */
-    imageArea.mozRequestFullScreen();
-  } else if (imageArea.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-    imageArea.webkitRequestFullscreen();
-  } else if (imageArea.msRequestFullscreen) { /* IE/Edge */
-    imageArea.msRequestFullscreen();
-  }
+  screenfull.toggle(imageArea);
+    // const element = document.documentElement; // 获取<html>元素
+
+    // if (element.requestFullscreen) {
+    //     element.requestFullscreen();
+    // } else if (element.mozRequestFullScreen) { /* Firefox */
+    //     element.mozRequestFullScreen();
+    // } else if (element.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+    //     element.webkitRequestFullscreen();
+    // } else if (element.msRequestFullscreen) { /* IE/Edge */
+    //     element.msRequestFullscreen();
+    // }
 });
 
 clearButton.addEventListener('click', () => {
