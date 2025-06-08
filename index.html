@@ -46,7 +46,7 @@ const imageArea = document.getElementById('image-area');
 let images = [];
 let currentImageIndex = 0;
 
-selectButton.addEventListener('click', () => {
+const selectImages = () => {
   const input = document.createElement('input');
   input.type = 'file';
   input.multiple = true;
@@ -58,6 +58,12 @@ selectButton.addEventListener('click', () => {
     showImage(currentImageIndex);
   });
   input.click();
+}
+
+selectButton.addEventListener('click', selectImages );
+
+imageArea.addEventListener('click', () => {
+  if (imageArea.innerHTML === "请选择图片") { selectImages(); }
 });
 
 function showImage(index) {
@@ -100,6 +106,7 @@ function startInterval() {
 
 intervalInput.addEventListener('change', startInterval);
 startInterval();
+showImage(0);
 
 // 全屏功能
 fullscreenButton.addEventListener('click', () => {
